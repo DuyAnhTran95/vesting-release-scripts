@@ -15,13 +15,15 @@ const contractAsOwner = new Contract(process.env.CONTRACT_ADDR, abi, owner);
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
 async function run() {
-    retries = 3;
+    let retries = 3;
     while (retries > 0) {
         try {
-            await contractAsIndi.releaseMyTokens();
+            var rs = await contractAsIndi.releaseMyTokens();
+            console.log(rs.hash);
 
-            await contractAsOwner.releaseBeneficiaryTokens();
-            
+            rs = await contractAsOwner.releaseBeneficiaryTokens();
+            console.log(rs.hash);
+
             retries = 0;
         } catch (e) {
             console.error(e);
@@ -35,4 +37,4 @@ async function run() {
 
 run();
 
-// setInterval(run, process.env.DURATUION);
+setInterval(run, process.env.DURATION);
